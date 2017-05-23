@@ -9,6 +9,8 @@
 import UIKit
 
 class MyTableViewController: UITableViewController {
+    
+    var items = ["Item 1", "Item 2", "Item 3"]
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -22,15 +24,28 @@ class MyTableViewController: UITableViewController {
     }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 5
+        return items.count
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        return tableView.dequeueReusableCell(withIdentifier: "cellID", for: indexPath)
+        let myCell = tableView.dequeueReusableCell(withIdentifier: "cellID", for: indexPath) as! MyCell
+        myCell.nameLabel.text = items[indexPath.row]
+        myCell.myTableViewController = self
+        return myCell
     }
     
     override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         return tableView.dequeueReusableHeaderFooterView(withIdentifier: "headerID")
+    }
+    
+    func deleteCell(cell: MyCell){
+        
+        if let deletionIndexPath = tableView.indexPath(for: cell){
+            items.remove(at: deletionIndexPath.row)
+            tableView.deleteRows(at: [deletionIndexPath], with: .fade)
+        }
+        
+        
     }
 }
 
@@ -66,6 +81,8 @@ class Header: UITableViewHeaderFooterView {
 
 class MyCell: UITableViewCell {
     
+    var myTableViewController: MyTableViewController?
+    
     
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -86,7 +103,7 @@ class MyCell: UITableViewCell {
     
     let actionButton: UIButton = {
         let button = UIButton(type: .system)
-        button.setTitle("Action", for: .normal)
+        button.setTitle("Delete", for: .normal)
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
     }()
@@ -106,7 +123,9 @@ class MyCell: UITableViewCell {
     }
     
     func handleAction(){
-        print("action button tapped")
+        
+        myTableViewController?.deleteCell(cell: self)
+        
     }
     
 }
