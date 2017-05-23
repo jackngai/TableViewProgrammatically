@@ -21,6 +21,17 @@ class MyTableViewController: UITableViewController {
         tableView.register(Header.self, forHeaderFooterViewReuseIdentifier: "headerID")
         
         tableView.sectionHeaderHeight = 50
+        
+        navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Insert", style: .plain, target: self, action: #selector(insert))
+    }
+    
+    func insert(){
+        items.append("Item \(items.count + 1)")
+        
+        let insertionIndexPath = IndexPath(row: items.count - 1, section: 0)
+        
+        tableView.insertRows(at: [insertionIndexPath], with: .top)
+        
     }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
