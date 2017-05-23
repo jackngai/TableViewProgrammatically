@@ -23,6 +23,29 @@ class MyTableViewController: UITableViewController {
         tableView.sectionHeaderHeight = 50
         
         navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Insert", style: .plain, target: self, action: #selector(insert))
+        
+        navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Batch Insert", style: .plain, target: self, action: #selector(insertBatch))
+    }
+    
+    func insertBatch(){
+        
+        var oddIndexPaths = [IndexPath]()
+        var evenIndexPaths = [IndexPath]()
+        for i in items.count...items.count + 5 {
+            items.append("Item \(i + 1)")
+            if i % 2 == 0{
+                evenIndexPaths.append(IndexPath(row: i, section: 0))
+            } else {
+                oddIndexPaths.append(IndexPath(row: i, section: 0))
+            }
+        }
+        
+        tableView.beginUpdates()
+        tableView.insertRows(at: oddIndexPaths, with: .left)
+        tableView.insertRows(at: evenIndexPaths, with: .right)
+        tableView.endUpdates()
+        
+        
     }
     
     func insert(){
